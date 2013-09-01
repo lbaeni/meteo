@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Meteo</title>
+
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+$(function() {
+
+	$.get('temperature.json', function(data) {
+//		var json = $.parseJSON(data);
+		var json = data;
+		var chart_data = []
+		for(var i = 0; i < json.length; i++) {
+			chart_data.push([
+				json[i][0]*1000,
+				json[i][1]]);
+		}
+		create_chart(chart_data);
+	});
+
+//	$.get('humidity.json', function(data) {
+////		var json = $.parseJSON(data);
+//		var json = data;
+//		var chart_data = []
+//		for(var i = 0; i < json.length; i++) {
+//			chart_data.push([
+//				json[i][0]*1000,
+//				json[i][1]]);
+//		}
+//		create_chart(chart_data);
+//	});
+
+	function create_chart(data) {
+		Highcharts.setOptions({
+			global: {
+				useUTC: false
+			}
+		});
+		$('#container').highcharts('StockChart', {
+			
+
+			rangeSelector: {
+				buttons: [{
+//					count: 5,
+//					type: 'minute',
+//					text: '5 min'
+//				}, {
+//					count: 1,
+//					type: 'hour',
+//					text: '1 h'
+//				}, {
+					count: 1,
+					type: 'day',
+					text: '1 d'
+				}, {
+					count: 1,
+					type: 'week',
+					text: '1 w'
+				}, {
+					type: 'all',
+					text: 'All'
+				}],
+				inputEnabled: false,
+				selected: 0
+			},
+
+			title : {
+				text : 'Temperature'
+			},
+			
+			series : [{
+				name : 'Temperature',
+				data : data,
+				tooltip: {
+					valueDecimals: 2
+				}
+			}]
+		});
+	}
+});
+
+		</script>
+	</head>
+	<body>
+<script src="js/highstock.js"></script>
+<script src="js/modules/exporting.js"></script>
+
+<div id="container" style="height: 500px; min-width: 500px"></div>
+	</body>
+</html>
