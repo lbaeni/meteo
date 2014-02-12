@@ -18,64 +18,33 @@ def get_latestData(period) :
 	data = cursor.fetchall()
 	return data
 
-def get_allData() :
-	cursor.execute("SELECT * FROM meteo")
+def get_allData(module) :
+	print module
+	cursor.execute("SELECT * FROM meteo WHERE module = ?", (module,))
 	data = cursor.fetchall()
 	return data
+
+def write_json(output_path, module, correction) :
+	data = get_allData(module)
+	# writing meteo data to file
+	json = open(output_path+'/'+module+'.json', 'w')
+	json.write('[')
+	i = 0
+	for value in data :
+		json.write('[{0},{1},{2},{3}]'.format(value[1]*1000., value[2]+correction[2], value[3]+correction[3], value[4]+correction[4]))
+		i = i+1
+		if i < len(data) :
+			json.write(',\n')
+	json.write(']')
+	json.close()
+
+init_db()
 
 db_path = sys.argv[1]
 output_path = sys.argv[2]
 init_db(db_path)
-#data = get_latestData(6000)
-data = get_allData()
-
-# writing temperature data to file
-json = open(output_path + '/temperature.json', 'w')
-json.write('[')
-i = 0
-for value in data :
-	json.write('[{0},{1}]'.format(value[1], value[2]))
-	i = i+1
-	if i < len(data) :
-		json.write(',')
-json.write(']')
-json.close()
-
-# writing humidity data to file
-json = open(output_path + '/humidity.json', 'w')
-json.write('[')
-i = 0
-for value in data :
-	json.write('[{0},{1}]'.format(value[1], value[3]))
-	i = i+1
-	if i < len(data) :
-		json.write(',')
-json.write(']')
-json.close()
-
-# writing pressure data to file
-json = open(output_path + '/pressure.json', 'w')
-json.write('[')
-i = 0
-for value in data :
-	json.write('[{0},{1}]'.format(value[1], value[4]))
-	i = i+1
-	if i < len(data) :
-		json.write(',')
-json.write(']')
-json.close()
-
-# writing meteo data to file
-json = open(output_path + '/meteo.json', 'w')
-json.write('[')
-i = 0
-for value in data :
-	json.write('[{0},{1},{2},{3}]'.format(value[1], value[2], value[3], value[4]))
-	i = i+1
-	if i < len(data) :
-		json.write(',')
-json.write(']')
-json.close()
+write_json(output_path, 'SENSORSERIALNUMBER1', [0., 0., 0., 0., 0.])
+write_json(output_path, 'SENSORSERIALNUMBER2', [0., 0., 0., 0., 0.])
 
 
 connection.close()
