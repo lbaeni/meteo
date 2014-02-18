@@ -7,13 +7,17 @@
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script type="text/javascript">
 $(function() {
-	var	sensor_series  = [],
-		temperature_series = [],
-		humidity_series    = [],
-		pressure_series    = [],
-		sensor_names   = ['inside', 'outside'],
-		sensor_locations   = ['inside', 'outside'],
-		sensor_colors      = ['#2f7ed8', '#910000'],
+	var	sensor_series = [],
+		sensors = [{
+				name:     'INSIDE-SENSOR',
+				location: 'inside',
+				color:    '#2f7ed8'
+			}, {
+				name:     'OURSIDE-SENSOR',
+				location: 'outside',
+				color:    '#910000'
+			}
+		],
 		sensor_counter = 0,
 		data_type = [{
 				name: 'Temperature',
@@ -28,8 +32,8 @@ $(function() {
 		];
 
 
-	$.each(sensor_names, function(i, sensor_name) {
-		$.getJSON(sensor_name+'.json',	function(data) {
+	$.each(sensors, function(i, sensor) {
+		$.getJSON(sensor.name+'.json',	function(data) {
 
 			// format data
 			var meteo_data = [[], [], []];
@@ -41,9 +45,9 @@ $(function() {
 
 			// loop over data types (temperature, humidity, pressure)
 			for (var j = 0; j < data_type.length; j++) {
-				sensor_series[i + 2*j] = {
-					name: data_type[j].name + ' ' + sensor_locations[i],
-					color: sensor_colors[i],
+				sensor_series[i + sensors.length*j] = {
+					name: data_type[j].name + ' ' + sensor.location,
+					color: sensor.color,
 					marker: {
 						symbol : 'circle'
 					},
@@ -59,7 +63,7 @@ $(function() {
 			// data is loaded asynchronously
 			// counter to check when all data is loaded
 			sensor_counter++;
-			if (sensor_counter == sensor_names.length) {
+			if (sensor_counter == sensors.length) {
 				create_chart(sensor_series, 'Meteo');
 			}
 		});
@@ -109,7 +113,7 @@ $(function() {
 			
 			yAxis: [{
 				title: {
-					text: 'Temperature (°C)'
+					text: data_type[0].name + ' (' + data_type[0].unit + ')'
 				},
 				top: 65,
 				height: 200,
@@ -117,7 +121,7 @@ $(function() {
 				lineWidth: 2
 			}, {
 				title: {
-					text: 'Humidity (%)'
+					text: data_type[1].name + ' (' + data_type[1].unit + ')'
 				},
 				top: 300,
 				height: 200,
@@ -125,7 +129,7 @@ $(function() {
 				lineWidth: 2
 			}, {
 				title: {
-					text: 'Pressure (Pa)'
+					text: data_type[2].name + ' (' + data_type[2].unit + ')'
 				},
 				top: 535,
 				height: 200,
