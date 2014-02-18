@@ -12,61 +12,55 @@ $(function() {
 		humidity_series    = [],
 		pressure_series    = [],
 		sensor_names   = ['inside', 'outside'],
-		sensor_counter = 0;
+		sensor_locations   = ['inside', 'outside'],
+		sensor_colors      = ['#2f7ed8', '#910000'],
+		sensor_counter = 0,
+		data_type = [{
+				name: 'Temperature',
+				unit: '°C',
+			}, {
+				name: 'Humidity',
+				unit: '%',
+			}, {
+				name: 'Pressure',
+				unit: 'Pa',
+			}
+		];
 
 
 	$.each(sensor_names, function(i, sensor_name) {
 		$.getJSON(sensor_name+'.json',	function(data) {
-//		$.get(sensor_name+'.json', function(data) {
-////			var json = $.parseJSON(data);
-//			var json = data;
-//			var chart_data = []
-//			for(var i = 0; i < json.length; i++) {
-//				chart_data.push([
-//					json[i][0]*1000,
-//					json[i][1]]);
-//			}
 
-			var temperature_data = [];
-			var humidity_data    = [];
-			var pressure_data    = [];
+			// format data
+			var meteo_data = [[], [], []];
 			for (var j = 0; j < data.length; j++) {
-				temperature_data.push([data[j][0], data[j][1]]);
-        		humidity_data   .push([data[j][0], data[j][2]]);
-        		pressure_data   .push([data[j][0], data[j][3]]);
+				for (var k = 0; k < meteo_data.length; k++) {
+					meteo_data[k].push([data[j][0]*1000., data[j][k+1]]);
+				}
 			}
 
-			temperature_series[i] = {
-				name: sensor_name,
-//				data: chart_data
-//				data: data
-				data: temperature_data
-//				tooltip: {
-//					valueDecimals: 2
-//				}
-			};
-			humidity_series[i] = {
-				name: sensor_name,
-				data: humidity_data
-//				tooltip: {
-//					valueDecimals: 2
-//				}
-			};
-			pressure_series[i] = {
-				name: sensor_name,
-				data: pressure_data
-//				tooltip: {
-//					valueDecimals: 2
-//				}
-			};
+			// loop over data types (temperature, humidity, pressure)
+			for (var j = 0; j < data_type.length; j++) {
+				sensor_series[i + 2*j] = {
+					name: data_type[j].name + ' ' + sensor_locations[i],
+					color: sensor_colors[i],
+					marker: {
+						symbol : 'circle'
+					},
+					data: meteo_data[j],
+					yAxis: j,
+					tooltip: {
+						pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ' + data_type[j].unit + '</b><br/>',
+						valueDecimals: 2
+					},
+				}
+			}
 
 			// data is loaded asynchronously
 			// counter to check when all data is loaded
 			sensor_counter++;
 			if (sensor_counter == sensor_names.length) {
-				create_chart(temperature_series, 'Temperature');
-				create_chart(humidity_series   , 'Humidity');
-				create_chart(pressure_series   , 'Pressure');
+				create_chart(sensor_series, 'Meteo');
 			}
 		});
 	});
@@ -113,10 +107,31 @@ $(function() {
 				text : container
 			},
 			
-		    tooltip: {
-		    	pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-		    	valueDecimals: 2
-		    },
+			yAxis: [{
+				title: {
+					text: 'Temperature (°C)'
+				},
+				top: 65,
+				height: 200,
+				offset: 0,
+				lineWidth: 2
+			}, {
+				title: {
+					text: 'Humidity (%)'
+				},
+				top: 300,
+				height: 200,
+				offset: 0,
+				lineWidth: 2
+			}, {
+				title: {
+					text: 'Pressure (Pa)'
+				},
+				top: 535,
+				height: 200,
+				offset: 0,
+				lineWidth: 2
+			}],
 		    
 			series : series
 		});
@@ -129,8 +144,6 @@ $(function() {
 <script src="js/highstock.js"></script>
 <script src="js/modules/exporting.js"></script>
 
-<div id="Temperature" style="height: 500px; min-width: 500px"></div>
-<div id="Humidity" style="height: 500px; min-width: 500px"></div>
-<div id="Pressure" style="height: 500px; min-width: 500px"></div>
+<div id="Meteo" style="height: 870px; min-width: 500px"></div>
 	</body>
 </html>
