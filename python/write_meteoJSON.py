@@ -19,8 +19,15 @@ def get_latestData(period) :
 	return data
 
 def get_allData(module) :
+	return get_data(module)
+
+def get_data(module, period = -1) :
 	print module
-	cursor.execute("SELECT * FROM meteo WHERE module = ?", (module,))
+	if period < 0 :
+		start_time = 0
+	else :
+		start_time = time.time() - period
+	cursor.execute("SELECT * FROM meteo WHERE module = ? AND timestamp > ?", (module, start_time))
 	data = cursor.fetchall()
 	return data
 
@@ -31,7 +38,7 @@ def write_json(output_path, module, correction) :
 	json.write('[')
 	i = 0
 	for value in data :
-		json.write('[{0},{1},{2},{3}]'.format(value[1]*1000., value[2]+correction[2], value[3]+correction[3], value[4]+correction[4]))
+		json.write('[{0},{1},{2},{3}]'.format(value[1], value[2]+correction[2], value[3]+correction[3], value[4]+correction[4]))
 		i = i+1
 		if i < len(data) :
 			json.write(',\n')
