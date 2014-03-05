@@ -21,13 +21,13 @@ $(function() {
 		sensor_counter = 0,
 		data_type = [{
 				name: 'Temperature',
-				unit: '°C',
+				unit: '°C'
 			}, {
 				name: 'Humidity',
-				unit: '%',
+				unit: '%'
 			}, {
 				name: 'Pressure',
-				unit: 'Pa',
+				unit: 'Pa'
 			}
 		];
 
@@ -55,7 +55,7 @@ $(function() {
 					yAxis: j,
 					tooltip: {
 						pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y} ' + data_type[j].unit + '</b><br/>',
-						valueDecimals: 2
+						valueDecimals: 1
 					},
 				}
 			}
@@ -88,10 +88,10 @@ $(function() {
 //					type: 'minute',
 //					text: '5 min'
 //				}, {
-//					count: 1,
-//					type: 'hour',
-//					text: '1 h'
-//				}, {
+					count: 1,
+					type: 'hour',
+					text: '1 h'
+				}, {
 					count: 1,
 					type: 'day',
 					text: '1 d'
@@ -103,8 +103,8 @@ $(function() {
 					type: 'all',
 					text: 'All'
 				}],
-				inputEnabled: false,
-				selected: 0
+//				inputEnabled: false,
+				selected: 1
 			},
 
 			title : {
