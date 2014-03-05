@@ -22,7 +22,7 @@ def get_allData(module) :
 	return get_data(module)
 
 def get_data(module, period = -1) :
-	print module
+#	print module
 	if period < 0 :
 		start_time = 0
 	else :
@@ -32,7 +32,10 @@ def get_data(module, period = -1) :
 	return data
 
 def write_json(output_path, module, correction) :
-	data = get_allData(module)
+	data = get_data(module, 2678400) # get last 31 days
+#	data = get_data(module, 86400.*60) # get last 60 days
+#	data = get_data(module, 86400.*100) # get last 100 days
+#	data = get_data(module) # get all data
 	# writing meteo data to file
 	json = open(output_path+'/'+module+'.json', 'w')
 	json.write('[')
