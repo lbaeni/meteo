@@ -45,4 +45,7 @@ config.read(config_file)
 for sensor in config.sections() :
 	if config.get(sensor, 'type') != 'meteo' : continue
 	target = config.get(sensor, 'serial_number')
-	write_json(db_path, output_path, target, [0., 0., 0., 0., 0.])
+	temp_offset  = float(config.get(sensor, 'temp_offset' ))
+	hum_offset   = float(config.get(sensor, 'hum_offset'  ))
+	press_offset = float(config.get(sensor, 'press_offset'))
+	write_json(db_path, output_path, target, [0., 0., temp_offset, hum_offset, press_offset])
