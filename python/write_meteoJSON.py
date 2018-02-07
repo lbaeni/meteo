@@ -48,8 +48,6 @@ def write_json(output_path, module, correction) :
 	json.write(']')
 	json.close()
 
-init_db()
-
 db_path = sys.argv[1]
 output_path = sys.argv[2]
 init_db(db_path)
