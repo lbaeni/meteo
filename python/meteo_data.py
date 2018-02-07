@@ -7,7 +7,7 @@ import os, sys
 class meteo_data(object) :
 
 	def __init__(self, db_path) :
-		self.connection = sqlite3.connect(db_path + "/meteo.db")
+		self.connection = sqlite3.connect(db_path)
 		self.cursor = self.connection.cursor()
 		self.cursor.execute("""CREATE TABLE IF NOT EXISTS meteo (
 			module TEXT, timestamp REAL, temperature REAL, humidity REAL, pressure REAL)""")

@@ -5,8 +5,8 @@ import ConfigParser
 import argparse
 
 arg_parser = argparse.ArgumentParser()
-arg_parser.add_argument('-d', '--database', help = 'directory of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test'       )
-arg_parser.add_argument('-c', '--config'  , help = 'config file of modules'     , default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg')
+arg_parser.add_argument('-d', '--database', help = 'path of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test/meteo.db')
+arg_parser.add_argument('-c', '--config'  , help = 'config file of modules', default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg'  )
 args = arg_parser.parse_args()
 db_path     = args.database
 config_file = args.config

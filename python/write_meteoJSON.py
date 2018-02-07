@@ -30,9 +30,9 @@ def write_json(db_path, output_path, module, correction) :
 	json.close()
 
 arg_parser = argparse.ArgumentParser()
-arg_parser.add_argument('-d', '--database', help = 'directory of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test'       )
-arg_parser.add_argument('-c', '--config'  , help = 'config file of modules'     , default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg')
-arg_parser.add_argument('-o', '--output'  , help = 'output directory'           , default = os.path.dirname(os.path.realpath(__file__)) + '/../test'       )
+arg_parser.add_argument('-d', '--database', help = 'path of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test/meteo.db')
+arg_parser.add_argument('-c', '--config'  , help = 'config file of modules', default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg'  )
+arg_parser.add_argument('-o', '--output'  , help = 'output directory'      , default = os.path.dirname(os.path.realpath(__file__)) + '/../test'         )
 args = arg_parser.parse_args()
 db_path     = args.database
 config_file = args.config
