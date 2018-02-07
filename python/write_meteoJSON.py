@@ -1,7 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sqlite3
-import time
 import os, sys
 import meteo_data
 
