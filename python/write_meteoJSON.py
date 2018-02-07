@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import os, sys
 import meteo_data
+import argparse
 
 
 def write_json(db_path, output_path, module, correction) :
@@ -27,7 +28,12 @@ def write_json(db_path, output_path, module, correction) :
 	json.write(']')
 	json.close()
 
-db_path = sys.argv[1]
-output_path = sys.argv[2]
+arg_parser = argparse.ArgumentParser()
+arg_parser.add_argument('-d', '--database', help = 'directory of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test'       )
+arg_parser.add_argument('-o', '--output'  , help = 'output directory'           , default = os.path.dirname(os.path.realpath(__file__)) + '/../test'       )
+args = arg_parser.parse_args()
+db_path     = args.database
+output_path = args.output
+
 write_json(db_path, output_path, 'SENSORSERIALNUMBER1', [0., 0., 0., 0., 0.])
 write_json(db_path, output_path, 'SENSORSERIALNUMBER2', [0., 0., 0., 0., 0.])
