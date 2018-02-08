@@ -11,7 +11,8 @@ def write_json(db_path, output_path, module, correction) :
 
 	# read meteo data from database
 	db = meteo_data.meteo_data(db_path)
-	data = db.get_data(module, 2678400) # get last 31 days
+	data = db.get_data(module, 86400*14) # get last 14 days
+#	data = db.get_data(module, 2678400) # get last 31 days
 #	data = db.get_data(module, 86400.*60) # get last 60 days
 #	data = db.get_data(module, 86400.*100) # get last 100 days
 #	data = db.get_data(module) # get all data
