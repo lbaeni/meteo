@@ -3,7 +3,7 @@ import time
 import os, sys
 import meteo_data
 # add /usr/lib/yoctopuce to the PYTHONPATH
-sys.path.append(os.path.join("/usr/lib/yoctopuce"))
+sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
 from yocto_api import *
 from yocto_humidity import *
 from yocto_temperature import *
