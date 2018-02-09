@@ -30,6 +30,8 @@ for module in meteo_sensors :
 		buz = buzzer.buzzer(buz_target)
 		temp_threshold = float(config.get(module, 'temp_threshold'))
 		if temp > temp_threshold :
+			if not buz.get_ledPower(2) :
+				buz.play_alarm()
 			buz.turn_ledOff(1)
 			buz.flash_led(2, 'RUN')
 		else :

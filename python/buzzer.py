@@ -55,5 +55,14 @@ class buzzer(object) :
 		led.set_power(yocto_led.YLed.POWER_OFF)
 
 
+	def get_ledPower(self, led_no) :
+		led = self.get_led(led_no)
+		return led.get_power() == yocto_led.YLed.POWER_ON
+
+
 	def play_success(self) :
 		self.buzzer.playNotes("200% 'G12 C E G6 E12 G2")
+
+
+	def play_alarm(self) :
+		self.buzzer.playNotes("A32^ A^ A^ A4^")
