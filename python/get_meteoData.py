@@ -15,8 +15,11 @@ config = ConfigParser.ConfigParser()
 config.optionxform = str # case sensitive options
 config.read(config_file)
 
-for sensor in config.sections() :
-	if config.get(sensor, 'type') != 'meteo' : continue
+# get module lists
+meteo_sensors = [module for module in config.sections() if config.get(module, 'type') == 'meteo' ]
+buzzers       = [module for module in config.sections() if config.get(module, 'type') == 'buzzer']
+
+for sensor in meteo_sensors :
 	target = config.get(sensor, 'serial_number')
 	sensor = yocto_meteo.yocto_meteo(target)
 	sensor.write_currentData(db_path)
