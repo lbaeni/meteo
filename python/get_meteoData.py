@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os, sys
 import yocto_meteo
+import buzzer
 import ConfigParser
 import argparse
 
@@ -19,7 +20,18 @@ config.read(config_file)
 meteo_sensors = [module for module in config.sections() if config.get(module, 'type') == 'meteo' ]
 buzzers       = [module for module in config.sections() if config.get(module, 'type') == 'buzzer']
 
-for sensor in meteo_sensors :
-	target = config.get(sensor, 'serial_number')
+for module in meteo_sensors :
+	target = config.get(module, 'serial_number')
 	sensor = yocto_meteo.yocto_meteo(target)
-	sensor.write_currentData(db_path)
+	[temp, hum, press] = sensor.write_currentData(db_path)
+	if config.has_option(module, 'buzzer') :
+		buz_name   = config.get(module  , 'buzzer'       )
+		buz_target = config.get(buz_name, 'serial_number')
+		buz = buzzer.buzzer(buz_target)
+		temp_threshold = float(config.get(module, 'temp_threshold'))
+		if temp > temp_threshold :
+			buz.turn_ledOff(1)
+			buz.flash_led(2, 'RUN')
+		else :
+			buz.turn_ledOff(2)
+			buz.flash_led(1, 'STILL')

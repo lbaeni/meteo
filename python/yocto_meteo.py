@@ -38,3 +38,4 @@ class yocto_meteo(object) :
 		db = meteo_data.meteo_data(db_path)
 		db.add_data(module_name, timestamp, temp, hum, press)
 		db.close()
+		return [temp, hum, press]
