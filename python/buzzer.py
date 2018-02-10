@@ -23,8 +23,7 @@ class buzzer(module.module) :
 		if   led_no == 1 : led = self.led1
 		elif led_no == 2 : led = self.led2
 		else :
-			print '[ERROR] LED not found!'
-			sys.exit(1)
+			self.die('LED not found!')
 		return led
 
 
@@ -32,8 +31,7 @@ class buzzer(module.module) :
 		led = self.get_led(led_no)
 		modes = ['STILL', 'RELAX', 'AWARE', 'RUN', 'CALL', 'PANIC']
 		if not mode_str in modes :
-			print '[ERROR] Only flash modes %s are available!' % ', '.join(modes)
-			sys.exit(1)
+			self.die('Only flash modes %s are available!' % ', '.join(modes))
 		mode = getattr(yocto_led.YLed, 'BLINKING_%s' % mode_str)
 		led.set_power(yocto_led.YLed.POWER_ON)
 		led.set_blinking(mode)
