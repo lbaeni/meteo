@@ -5,18 +5,18 @@ import meteo_data
 import module
 # add /usr/lib/yoctopuce to the PYTHONPATH
 sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
-from yocto_humidity import *
-from yocto_temperature import *
-from yocto_pressure import *
+import yocto_humidity
+import yocto_temperature
+import yocto_pressure
 
 
 class yocto_meteo(module.module) :
 
 	def __init__(self, target) :
 		module.module.__init__(self, target)
-		self.hum_sensor   = YHumidity   .FindHumidity   (target+'.humidity')
-		self.press_sensor = YPressure   .FindPressure   (target+'.pressure')
-		self.temp_sensor  = YTemperature.FindTemperature(target+'.temperature')
+		self.hum_sensor   = yocto_humidity   .YHumidity   .FindHumidity   (target+'.humidity')
+		self.press_sensor = yocto_pressure   .YPressure   .FindPressure   (target+'.pressure')
+		self.temp_sensor  = yocto_temperature.YTemperature.FindTemperature(target+'.temperature')
 
 
 	def die(self, msg) :
