@@ -19,10 +19,6 @@ class buzzer(module.module) :
 		self.button2 = yocto_anbutton.YAnButton.FindAnButton(target + '.anButton2')
 
 
-	def die(self, msg) :
-		sys.exit(msg+' (check USB cable)')
-
-
 	def get_led(self, led_no) :
 		if   led_no == 1 : led = self.led1
 		elif led_no == 2 : led = self.led2

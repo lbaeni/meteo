@@ -19,10 +19,6 @@ class yocto_meteo(module.module) :
 		self.temp_sensor  = yocto_temperature.YTemperature.FindTemperature(target+'.temperature')
 
 
-	def die(self, msg) :
-		sys.exit(msg+' (check USB cable)')
-
-
 	def write_currentData(self, db_path) :
 		timestamp = time.time()
 		temp  = self.temp_sensor .get_currentValue()
