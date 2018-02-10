@@ -27,7 +27,6 @@ for module in meteo_sensors :
 	sensor = yocto_meteo.yocto_meteo(target)
 	[data[module]['temp'], data[module]['hum'], data[module]['press']] = sensor.write_currentData(db_path)
 	sensor.turn_beaconOff()
-	print data[module]['temp']
 
 	# activate buzzer if temperature is above threshold
 	if config.has_option(module, 'buzzer') :
