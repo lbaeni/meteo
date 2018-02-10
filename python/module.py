@@ -19,3 +19,11 @@ class module(object) :
 
 	def die(self, msg) :
 		sys.exit(msg+' (check USB cable)')
+
+
+	def turn_beaconOn(self) :
+		self.module.set_beacon(yocto_api.YModule.BEACON_ON)
+
+
+	def turn_beaconOff(self) :
+		self.module.set_beacon(yocto_api.YModule.BEACON_OFF)
