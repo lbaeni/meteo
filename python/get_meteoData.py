@@ -36,4 +36,4 @@ for module in meteo_sensors :
 			buz.flash_led(2, 'RUN')
 		else :
 			buz.turn_ledOff(2)
-			buz.flash_led(1, 'STILL')
+			buz.flash_led(1, 'STILL', 1)

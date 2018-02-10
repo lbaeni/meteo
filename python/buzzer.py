@@ -28,7 +28,7 @@ class buzzer(module.module) :
 		return led
 
 
-	def flash_led(self, led_no, mode_str = 'PANIC') :
+	def flash_led(self, led_no, mode_str = 'PANIC', luminosity = 50) :
 		led = self.get_led(led_no)
 		modes = ['STILL', 'RELAX', 'AWARE', 'RUN', 'CALL', 'PANIC']
 		if not mode_str in modes :
@@ -37,6 +37,7 @@ class buzzer(module.module) :
 		mode = getattr(yocto_led.YLed, 'BLINKING_%s' % mode_str)
 		led.set_power(yocto_led.YLed.POWER_ON)
 		led.set_blinking(mode)
+		led.set_luminosity(luminosity)
 
 
 	def turn_ledOff(self, led_no) :
