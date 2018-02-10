@@ -2,24 +2,18 @@
 import time
 import os, sys
 import meteo_data
+import module
 # add /usr/lib/yoctopuce to the PYTHONPATH
 sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
-from yocto_api import *
 from yocto_humidity import *
 from yocto_temperature import *
 from yocto_pressure import *
 
 
-class yocto_meteo(object) :
+class yocto_meteo(module.module) :
 
 	def __init__(self, target) :
-		errmsg = YRefParam()
-
-		# Setup the API to use local USB devices
-		if YAPI.RegisterHub("usb", errmsg)!= YAPI.SUCCESS:
-			sys.exit("init error"+errmsg.value)
-		self.module = YModule.FindModule(target)
-		if not self.module.isOnline() : self.die('device not connected')
+		module.module.__init__(self, target)
 		self.hum_sensor   = YHumidity   .FindHumidity   (target+'.humidity')
 		self.press_sensor = YPressure   .FindPressure   (target+'.pressure')
 		self.temp_sensor  = YTemperature.FindTemperature(target+'.temperature')

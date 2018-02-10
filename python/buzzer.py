@@ -1,24 +1,17 @@
 #!/usr/bin/python
 import os, sys
+import module
 # add /usr/lib/yoctopuce to the PYTHONPATH
 sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
-import yocto_api
 import yocto_buzzer
 import yocto_led
 import yocto_anbutton
 
 
-class buzzer(object) :
+class buzzer(module.module) :
 
 	def __init__(self, target) :
-		errmsg = yocto_api.YRefParam()
-
-		# Setup the API to use local USB devices
-		if yocto_api.YAPI.RegisterHub("usb", errmsg) != yocto_api.YAPI.SUCCESS:
-			sys.exit("init error" + errmsg.value)
-		self.module = yocto_api.YModule.FindModule(target)
-		if not self.module.isOnline() : self.die('device not connected')
-
+		module.module.__init__(self, target)
 		self.buzzer  = yocto_buzzer  .YBuzzer  .FindBuzzer  (target)
 		self.led1    = yocto_led     .YLed     .FindLed     (target + '.led1')
 		self.led2    = yocto_led     .YLed     .FindLed     (target + '.led2')
