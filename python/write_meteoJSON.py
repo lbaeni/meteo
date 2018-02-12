@@ -6,16 +6,12 @@ import argparse
 import ConfigParser
 
 
-def write_json(db_path, output_path, module, correction) :
+def write_json(db_path, output_path, module, correction, period = -1) :
 	'''read meteo data from database and write it to a json file'''
 
 	# read meteo data from database
 	db = meteo_data.meteo_data(db_path)
-	data = db.get_data(module, 86400*14) # get last 14 days
-#	data = db.get_data(module, 2678400) # get last 31 days
-#	data = db.get_data(module, 86400.*60) # get last 60 days
-#	data = db.get_data(module, 86400.*100) # get last 100 days
-#	data = db.get_data(module) # get all data
+	data = db.get_data(module, period)
 	db.close()
 
 	# writing meteo data to file
@@ -41,10 +37,12 @@ arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('-d', '--database', help = 'path of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test/meteo.db')
 arg_parser.add_argument('-c', '--config'  , help = 'config file of modules', default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg'  )
 arg_parser.add_argument('-o', '--output'  , help = 'output directory'      , default = os.path.dirname(os.path.realpath(__file__)) + '/../test'         )
+arg_parser.add_argument('-p', '--period'  , help = 'time period in seconds', default = -1                                                               , type = int)
 args = arg_parser.parse_args()
 db_path     = args.database
 config_file = args.config
 output_path = args.output
+period      = args.period
 
 config = ConfigParser.ConfigParser()
 config.optionxform = str # case sensitive options
@@ -56,4 +54,4 @@ for sensor in config.sections() :
 	temp_offset  = float(config.get(sensor, 'temp_offset' ))
 	hum_offset   = float(config.get(sensor, 'hum_offset'  ))
 	press_offset = float(config.get(sensor, 'press_offset'))
-	write_json(db_path, output_path, target, [0., 0., temp_offset, hum_offset, press_offset])
+	write_json(db_path, output_path, target, [0., 0., temp_offset, hum_offset, press_offset], period)
