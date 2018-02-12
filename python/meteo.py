@@ -10,7 +10,7 @@ import yocto_temperature
 import yocto_pressure
 
 
-class yocto_meteo(module.module) :
+class meteo(module.module) :
 
 	def __init__(self, target) :
 		module.module.__init__(self, target)

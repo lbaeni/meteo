@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import os, sys
-import yocto_meteo
+import meteo
 import buzzer
 import ConfigParser
 import argparse
@@ -24,7 +24,7 @@ data = {}
 for module in meteo_sensors :
 	data[module] = {}
 	target = config.get(module, 'serial_number')
-	sensor = yocto_meteo.yocto_meteo(target)
+	sensor = meteo.meteo(target)
 	[data[module]['temp'], data[module]['hum'], data[module]['press']] = sensor.write_currentData(db_path)
 	sensor.turn_beaconOff()
 
@@ -49,6 +49,6 @@ for module in meteo_sensors :
 	reference_module = config.get(module, 'temp_threshold')
 	if not reference_module in meteo_sensors : continue
 	target = config.get(module, 'serial_number')
-	sensor = yocto_meteo.yocto_meteo(target)
+	sensor = meteo.meteo(target)
 	if data[module]['temp'] > data[reference_module]['temp'] : sensor.turn_beaconOn()
 	else                                                     : sensor.turn_beaconOff()
