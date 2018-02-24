@@ -25,7 +25,6 @@ class meteo(module.module) :
 		hum   = self.hum_sensor  .get_currentValue()
 		press = self.press_sensor.get_currentValue()
 		module_name = self.module.get_serialNumber()
-		db = meteo_data.meteo_data(db_path)
-		db.add_data(module_name, timestamp, temp, hum, press)
-		db.close()
+		with meteo_data.database_handler(db_path) as db :
+			db.add_data(module_name, timestamp, temp, hum, press)
 		return [temp, hum, press]

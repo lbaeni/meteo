@@ -10,9 +10,8 @@ def write_json(db_path, output_path, module, correction, period = -1) :
 	'''read meteo data from database and write it to a json file'''
 
 	# read meteo data from database
-	db = meteo_data.meteo_data(db_path)
-	data = db.get_data(module, period)
-	db.close()
+	with meteo_data.database_handler(db_path) as db :
+		data = db.get_data(module, period)
 
 	# writing meteo data to file
 	with open(output_path+'/'+module+'.json', 'w') as json :
