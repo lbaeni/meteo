@@ -35,12 +35,12 @@ arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('-d', '--database', help = 'path of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test/meteo.db')
 arg_parser.add_argument('-c', '--config'  , help = 'config file of modules', default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg'  )
 arg_parser.add_argument('-o', '--output'  , help = 'output directory'      , default = os.path.dirname(os.path.realpath(__file__)) + '/../test'         )
-arg_parser.add_argument('-p', '--period'  , help = 'time period in seconds', default = -1                                                               , type = int)
+arg_parser.add_argument('-p', '--period'  , help = 'time period in days'   , default = -1                                                               , type = int)
 args = arg_parser.parse_args()
 db_path     = args.database
 config_file = args.config
 output_path = args.output
-period      = args.period
+period      = args.period * 86400
 
 config = ConfigParser.ConfigParser()
 config.optionxform = str # case sensitive options
