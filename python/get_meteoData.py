@@ -4,10 +4,12 @@ import meteo
 import buzzer
 import ConfigParser
 import argparse
+import json
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('-d', '--database', help = 'path of meteo database', default = os.path.dirname(os.path.realpath(__file__)) + '/../test/meteo.db')
 arg_parser.add_argument('-c', '--config'  , help = 'config file of modules', default = os.path.dirname(os.path.realpath(__file__)) + '/../modules.cfg'  )
+arg_parser.add_argument('-j', '--json'    , help = 'JSON with current data')
 args = arg_parser.parse_args()
 db_path     = args.database
 config_file = args.config
@@ -42,6 +44,11 @@ for module in meteo_sensors :
 		else :
 			buz.turn_ledOff(2)
 			buz.flash_led(1, 'STILL', 1)
+
+# write current meteo data to json file
+if args.json != None :
+	with open(args.json, 'w') as file :
+		json.dump(data, file, sort_keys = True)
 
 # compare temperature of different sensors
 for module in meteo_sensors :
