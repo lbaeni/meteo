@@ -27,4 +27,8 @@ class meteo(module.module) :
 		module_name = self.module.get_serialNumber()
 		with meteo_data.database_handler(db_path) as db :
 			db.add_data(module_name, timestamp, temp, hum, press)
-		return [temp, hum, press]
+		return {
+				'timestamp'   : timestamp,
+				'temperature' : temp,
+				'humidity'    : hum,
+				'pressure'    : press}

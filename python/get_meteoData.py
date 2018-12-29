@@ -24,10 +24,9 @@ buzzers       = [module for module in config.sections() if config.get(module, 't
 
 data = {}
 for module in meteo_sensors :
-	data[module] = {}
 	target = config.get(module, 'serial_number')
 	sensor = meteo.meteo(target)
-	[data[module]['temperature'], data[module]['humidity'], data[module]['pressure']] = sensor.write_currentData(db_path)
+	data[module] = sensor.write_currentData(db_path)
 	sensor.turn_beaconOff()
 
 	# activate buzzer if temperature is above threshold
