@@ -29,10 +29,10 @@ for module in meteo_sensors :
 	data[module] = sensor.write_currentData(db_path)
 	sensor.turn_beaconOff()
 
-        # apply offsets
-        for par, par_key in [['temp', 'temperature'], ['hum', 'humidity'], ['press', 'pressure']] :
-            if config.has_option(module, '%s_offset' % par) :
-                data[module][par_key] += float(config.get(module, '%s_offset' % par))
+	# apply offsets
+	for par, par_key in [['temp', 'temperature'], ['hum', 'humidity'], ['press', 'pressure']] :
+		if config.has_option(module, '%s_offset' % par) :
+			data[module][par_key] += float(config.get(module, '%s_offset' % par))
 
 	# activate buzzer if temperature is above threshold
 	if config.has_option(module, 'buzzer') :
