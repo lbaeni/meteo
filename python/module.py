@@ -2,8 +2,8 @@
 import os, sys
 import time
 # add /usr/lib/yoctopuce to the PYTHONPATH
-sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
-import yocto_api
+sys.path.append(os.path.join("/usr/local/lib"))
+from yoctopuce import yocto_api
 
 
 class module(object) :

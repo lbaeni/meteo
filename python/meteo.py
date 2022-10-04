@@ -4,10 +4,10 @@ import os, sys
 import meteo_data
 import module
 # add /usr/lib/yoctopuce to the PYTHONPATH
-sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
-import yocto_humidity
-import yocto_temperature
-import yocto_pressure
+sys.path.append(os.path.join("/usr/local/lib"))
+from yoctopuce import yocto_humidity
+from yoctopuce import yocto_temperature
+from yoctopuce import yocto_pressure
 
 
 class meteo(module.module) :

@@ -2,10 +2,10 @@
 import os, sys
 import module
 # add /usr/lib/yoctopuce to the PYTHONPATH
-sys.path.append(os.path.join("/usr/local/lib/yoctopuce"))
-import yocto_buzzer
-import yocto_led
-import yocto_anbutton
+sys.path.append(os.path.join("/usr/local/lib"))
+from yoctopuce import yocto_buzzer
+from yoctopuce import yocto_led
+from yoctopuce import yocto_anbutton
 
 
 class buzzer(module.module) :
