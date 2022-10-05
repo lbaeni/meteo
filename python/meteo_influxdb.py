@@ -13,14 +13,14 @@ class meteo_influxdb(object) :
 		self.write_api = self.client.write_api(write_options = SYNCHRONOUS)
 
 
-	def add_data(self, measurement, timestamp, temperature, humidity, pressure, location, serial) :
-		point = Point(measurement) \
-				.tag('location', location) \
-				.tag('serial'  , serial  ) \
-				.field('temp', temperature) \
-				.field('hum' , humidity   ) \
-				.field('pres', pressure   ) \
-				.time(timestamp, WritePrecision.S)
+	def add_data(self, measurement, timestamp, temperature, humidity, pressure, location = None, serial = None) :
+		point = Point(measurement)
+		if location is not None : point.tag('location', location)
+		if serial   is not None : point.tag('serial'  , serial  )
+		point.field('temp', temperature)
+		point.field('hum' , humidity   )
+		point.field('pres', pressure   )
+		point.time(timestamp, WritePrecision.S)
 		self.write_api.write(self.bucket, self.org, point)
 
 
