@@ -29,7 +29,7 @@ class meteo(module.module) :
 
 	def process_currentData(self, db_path = None, influxdb_config = None) :
 		timestamp = time.time()
-		ts        = datetime.fromtimestamp(timestamp)
+		ts        = datetime.utcfromtimestamp(timestamp)
 		temp  = self.temp_sensor .get_currentValue()
 		hum   = self.hum_sensor  .get_currentValue()
 		press = self.press_sensor.get_currentValue()
