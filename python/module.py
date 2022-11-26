@@ -11,9 +11,10 @@ class module(object) :
 	def __init__(self, target) :
 		errmsg = yocto_api.YRefParam()
 
-		# Setup the API to use local USB devices
+		# Setup the API to use local USB devices or hub on localhost
 		if yocto_api.YAPI.RegisterHub("usb", errmsg) != yocto_api.YAPI.SUCCESS:
-			self.die("Initialisation error. " + errmsg.value)
+			if yocto_api.YAPI.RegisterHub("127.0.0.1", errmsg) != yocto_api.YAPI.SUCCESS :
+				self.die("Initialisation error. " + errmsg.value)
 		self.module = yocto_api.YModule.FindModule(target)
 		if not self.module.isOnline() :
 			self.die('Device %s not connected (check USB cable)!' % target)
