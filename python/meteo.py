@@ -14,8 +14,8 @@ from yoctopuce import yocto_pressure
 
 class meteo(module.module) :
 
-	def __init__(self, target, location = None, db_measurement = None) :
-		module.module.__init__(self, target)
+	def __init__(self, target, location = None, db_measurement = None, hub = 'local') :
+		module.module.__init__(self, target, hub = hub)
 		self.hum_sensor   = yocto_humidity   .YHumidity   .FindHumidity   (target+'.humidity')
 		self.press_sensor = yocto_pressure   .YPressure   .FindPressure   (target+'.pressure')
 		self.temp_sensor  = yocto_temperature.YTemperature.FindTemperature(target+'.temperature')
