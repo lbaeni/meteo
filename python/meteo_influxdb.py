@@ -25,6 +25,7 @@ class meteo_influxdb(object) :
 
 
 	def close(self) :
+		self.write_api.close()
 		self.client.close()
 
 
