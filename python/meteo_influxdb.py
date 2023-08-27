@@ -1,5 +1,6 @@
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
+import pandas as pd
 
 
 class meteo_influxdb(object) :
@@ -22,6 +23,28 @@ class meteo_influxdb(object) :
 		point.field('pres', pressure   )
 		point.time(timestamp, WritePrecision.S)
 		self.write_api.write(self.bucket, self.org, point)
+
+
+	def add_df(self, df, measurement, tag_columns = []) :
+		self.write_api.write(self.bucket, self.org, df, write_precision = WritePrecision.S, data_frame_measurement_name = measurement, data_frame_tag_columns = tag_columns)
+
+
+	def get_latestData(self, measurement, location = None, serial = None) :
+		requirements = ''
+		if serial   != None : requirements += ' and r.serial == "%s"'   % serial
+		if location != None : requirements += ' and r.location == "%s"' % location
+		query = f'from(bucket: "%s") |> range(start: 0, stop: now()) |>  filter(fn: (r) => r._measurement == "%s"%s) |> sort(columns: ["_time"], desc: false) |> last(column: "_time") |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")' % (self.bucket, measurement, requirements)
+		df = self.client.query_api().query_data_frame(query = query, org = self.org)
+		return df
+
+
+	def get_latestTimestamp(self, measurement, location = None, serial = None) :
+		df = self.get_latestData(measurement, location, serial)
+		if len(df.index) == 1 :
+			timestamp = df.loc[0, '_time']
+			return timestamp
+		elif len(df.index) == 0 :
+			return pd.Timestamp('1970-01-01T00:00:00Z')
 
 
 	def close(self) :
