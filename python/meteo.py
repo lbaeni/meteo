@@ -21,6 +21,7 @@ class meteo(module.module) :
 		self.hum_sensor   = yocto_humidity   .YHumidity   .FindHumidity   (target+'.humidity')
 		self.press_sensor = yocto_pressure   .YPressure   .FindPressure   (target+'.pressure')
 		self.temp_sensor  = yocto_temperature.YTemperature.FindTemperature(target+'.temperature')
+		self.logger       = yocto_api        .YDataLogger .FindDataLogger (target+'.dataLogger')
 		self.location = location
 		self.db_measurement = db_measurement
 
@@ -103,6 +104,14 @@ class meteo(module.module) :
 			dfs.append(df_par)
 		df = pd.concat(dfs, axis = 1)
 		return df
+
+
+	def set_logger(self, state) :
+		current_state = self.logger.get_recording()
+		if state != current_state :
+			result = self.logger.set_recording(state)
+			if result != yocto_api.YAPI.SUCCESS :
+				raise Exception('Could not change logger state to %d!' % state)
 
 
 	def set_logFrequency(self, frequency) :
