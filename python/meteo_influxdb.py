@@ -45,6 +45,9 @@ class meteo_influxdb(object) :
 			return timestamp
 		elif len(df.index) == 0 :
 			return pd.Timestamp('1970-01-01T00:00:00Z')
+		elif len(df.index) > 1 :
+			timestamp = df.sort_values(by = '_time')._time.iloc[0]
+			return timestamp
 
 
 	def close(self) :
