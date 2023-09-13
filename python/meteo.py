@@ -69,8 +69,8 @@ class meteo(module.module) :
 				'pressure'    : press}
 
 
-	def process_logger(self, db_path = None, influxdb_config = None) :
-		end = time.time() - 15
+	def process_logger(self, db_path = None, influxdb_config = None, max_period = None) :
+		now = time.time() - 15
 		if db_path is not None :
 			raise NotImplementedError('Usage of database file not implemented yet!')
 		elif influxdb_config is not None :
@@ -78,6 +78,10 @@ class meteo(module.module) :
 				self.die('Please define measurement for InfluxDB!')
 			with meteo_influxdb.database_handler(influxdb_config) as db :
 				start = db.get_latestTimestamp(self.db_measurement, self.location, self.module.get_serialNumber()).timestamp()
+				if max_period is None :
+					end = now
+				else :
+					end = min(start + max_period, now)
 				df = self.read_logger(start, end)
 				df = df[df.index > datetime.utcfromtimestamp(start)]
 				df['location'] = self.location
