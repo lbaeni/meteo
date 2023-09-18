@@ -10,8 +10,8 @@ from yoctopuce import yocto_anbutton
 
 class buzzer(module.module) :
 
-	def __init__(self, target) :
-		module.module.__init__(self, target)
+	def __init__(self, target, hub = 'local') :
+		module.module.__init__(self, target, hub = hub)
 		self.buzzer  = yocto_buzzer  .YBuzzer  .FindBuzzer  (target)
 		self.led1    = yocto_led     .YLed     .FindLed     (target + '.led1')
 		self.led2    = yocto_led     .YLed     .FindLed     (target + '.led2')
