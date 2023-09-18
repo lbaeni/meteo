@@ -25,7 +25,11 @@ buzzers       = [module for module in config.sections() if config.get(module, 't
 data = {}
 for module in meteo_sensors :
 	target = config.get(module, 'serial_number')
-	sensor = meteo.meteo(target)
+	if config.has_option(module, 'hub') :
+		hub = config.get(module, 'hub')
+	else :
+		hub = 'local'
+	sensor = meteo.meteo(target, hub = hub)
 	data[module] = sensor.write_currentData(db_path)
 	sensor.turn_beaconOff()
 
