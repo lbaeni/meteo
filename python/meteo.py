@@ -129,7 +129,7 @@ class meteo(module.module) :
 		if saveToFlash :
 			result = self.module.saveToFlash()
 			if result != yocto_api.YAPI.SUCCESS :
-				raise Exception('Could not settings to flash!')
+				raise Exception('Could not save settings to flash!')
 
 
 	def check_logFrequency(self) :
