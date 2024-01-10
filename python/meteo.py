@@ -118,6 +118,17 @@ class meteo(module.module) :
 				raise Exception('Could not change logger state to %d!' % state)
 
 
+	def set_autoStart(self, auto_start) :
+		if auto_start != self.logger.get_autoStart() :
+			result = self.logger.set_autoStart(auto_start)
+			if result != yocto_api.YAPI.SUCCESS :
+				raise Exception('Could not set default activation state to %d!' % auto_start)
+			else :
+				result = self.module.saveToFlash()
+				if result != yocto_api.YAPI.SUCCESS :
+					raise Exception('Could not save settings to flash!')
+
+
 	def set_logFrequency(self, frequency) :
 		saveToFlash = False
 		for sensor in self.sensors :
