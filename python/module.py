@@ -11,6 +11,11 @@ class module(object) :
 	def __init__(self, target, hub = "local") :
 		errmsg = yocto_api.YRefParam()
 
+		# Test if module is online already
+		self.module = yocto_api.YModule.FindModule(target)
+		if self.module.isOnline() :
+			return
+
 		# Setup the API to use local USB devices or hub on localhost
 		if hub == "local" :
 			if yocto_api.YAPI.RegisterHub("usb", errmsg) != yocto_api.YAPI.SUCCESS :
