@@ -105,6 +105,7 @@ class meteo(module.module) :
 			for data in dataset.get_measures() :
 				ts = datetime.utcfromtimestamp(data.get_startTimeUTC())
 				df_par.loc[ts] = [data.get_averageValue()]
+			if len(df_par.index) == 0 : continue
 			dfs.append(df_par)
 		df = pd.concat(dfs, axis = 1)
 		return df
