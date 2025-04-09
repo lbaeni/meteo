@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 import pandas as pd
 import os, sys
+import logging
 import meteo_data
 import meteo_influxdb
 import module
@@ -69,7 +70,7 @@ class meteo(module.module) :
 				'pressure'    : press}
 
 
-	def process_logger(self, db_path = None, influxdb_config = None, max_period = None, logger_start = 0, logger_end = None) :
+	def process_logger(self, db_path = None, influxdb_config = None, max_period = None, logger_start = 0, logger_end = None, period_info_threshold = 3600) :
 		now = time.time() - 15
 		if db_path is not None :
 			raise NotImplementedError('Usage of database file not implemented yet!')
@@ -86,22 +87,29 @@ class meteo(module.module) :
 					end = min(end, logger_end)
 					if logger_end < start :
 						return
-				df = self.read_logger(start, end)
+				df = self.read_logger(start, end, period_info_threshold)
 				df = df[df.index > datetime.utcfromtimestamp(start)]
 				df['location'] = self.location
 				df['serial'  ] = self.module.get_serialNumber()
 				db.add_df(df, self.db_measurement, tag_columns = ['location', 'serial'])
 		else :
 			start = 0
-			return self.read_logger(start, end)
+			return self.read_logger(start, end, period_info_threshold)
 
 
-	def read_logger(self, start = 0, end = 0) :
+	def read_logger(self, start = 0, end = 0, period_info_threshold = 3600) :
 		self.check_logFrequency()
 		dfs = []
 		for par in self.sensor_types :
 			sensor = self.par_sensor(par)
 			dataset = sensor.get_recordedData(start, end)
+			if end-start > period_info_threshold :
+				dataset.loadMore()
+				summary = dataset.get_summary()
+				start_time = summary.get_startTimeUTC()
+				end_time   = summary.get_endTimeUTC  ()
+				if end_time-start_time > period_info_threshold :
+					logging.info(f'Loading {par} logger data from {self.module.get_serialNumber()} ({datetime.utcfromtimestamp(start_time).isoformat()} to {datetime.utcfromtimestamp(end_time).isoformat()})')
 			progress = 0
 			while progress < 100 :
 				progress = dataset.loadMore()
