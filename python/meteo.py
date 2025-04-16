@@ -88,6 +88,7 @@ class meteo(module.module) :
 					if logger_end < start :
 						return
 				df = self.read_logger(start, end, period_info_threshold)
+				if df is None : return
 				df = df[df.index > datetime.utcfromtimestamp(start)]
 				df['location'] = self.location
 				df['serial'  ] = self.module.get_serialNumber()
@@ -119,6 +120,7 @@ class meteo(module.module) :
 				df_par.loc[ts] = [data.get_averageValue()]
 			if len(df_par.index) == 0 : continue
 			dfs.append(df_par)
+		if len(dfs) == 0 : return None
 		df = pd.concat(dfs, axis = 1)
 		return df
 
