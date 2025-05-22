@@ -10,7 +10,11 @@ class meteo_influxdb(object) :
 		self.token  = db_config['token' ]
 		self.org    = db_config['org'   ]
 		self.bucket = db_config['bucket']
-		self.client = InfluxDBClient(url = self.url, token = self.token, org = self.org)
+		if 'timeout' in db_config.keys() :
+			self.timeout = db_config['timeout']
+		else :
+			self.timeout = 10000
+		self.client = InfluxDBClient(url = self.url, token = self.token, org = self.org, timeout = self.timeout)
 		self.write_api = self.client.write_api(write_options = SYNCHRONOUS)
 
 
