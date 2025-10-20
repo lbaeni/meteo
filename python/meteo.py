@@ -94,7 +94,15 @@ class meteo(module.module) :
 				df['serial'  ] = self.module.get_serialNumber()
 				db.add_df(df, self.db_measurement, tag_columns = ['location', 'serial'])
 		else :
-			start = 0
+			start = logger_start
+			if max_period is None :
+				end = now
+			else :
+				end = min(start + max_period, now)
+			if logger_end is not None :
+				end = min(end, logger_end)
+				if logger_end < start :
+					return
 			return self.read_logger(start, end, period_info_threshold)
 
 
