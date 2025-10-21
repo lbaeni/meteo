@@ -38,6 +38,14 @@ class meteo(module.module) :
 		return sensor_types
 
 
+	def par_name(self, par) :
+		if   par == 'temp' : return 'temperature'
+		elif par == 'hum'  : return 'humidity'
+		elif par == 'pres' : return 'pressure'
+		else :
+			raise NotImplementedError(f'Parameter `{par}` is not known!')
+
+
 	@property
 	def sensors(self) :
 		sensors = [self.par_sensor(sensor_type) for sensor_type in self.sensor_types]
@@ -49,25 +57,26 @@ class meteo(module.module) :
 
 
 	def process_currentData(self, db_path = None, influxdb_config = None) :
+		data = {}
 		timestamp = time.time()
-		ts        = datetime.utcfromtimestamp(timestamp)
-		temp  = self.temp_sensor .get_currentValue()
-		hum   = self.hum_sensor  .get_currentValue()
-		press = self.press_sensor.get_currentValue()
+		data['ts'] = datetime.utcfromtimestamp(timestamp)
 		module_name = self.module.get_serialNumber()
+		for par in self.sensor_types :
+			data[par] = [self.par_sensor(par).get_currentValue()]
+		df = pd.DataFrame.from_dict(data).set_index('ts')
+		df['location'] = self.location
+		df['serial'  ] = module_name
+		data_dict = {self.par_name(par): data[par][0] for par in self.sensor_types}
+		data_dict['timestamp'] = timestamp
 		if db_path is not None :
 			with meteo_data.database_handler(db_path) as db :
-				db.add_data(module_name, timestamp, temp, hum, press)
+				db.add_data(module_name, **data_dict)
 		if influxdb_config is not None :
 			if self.db_measurement is None :
 				self.die('Please define measurement for InfluxDB!')
 			with meteo_influxdb.database_handler(influxdb_config) as db :
-				db.add_data(self.db_measurement, ts, temp, hum, press, self.location, module_name)
-		return {
-				'timestamp'   : timestamp,
-				'temperature' : temp,
-				'humidity'    : hum,
-				'pressure'    : press}
+				db.add_df(df, self.db_measurement, tag_columns = ['location', 'serial'])
+		return data_dict
 
 
 	def process_logger(self, db_path = None, influxdb_config = None, max_period = None, logger_start = 0, logger_end = None, period_info_threshold = 3600) :
